@@ -127,7 +127,15 @@ MyChessGame >> initializeFromFENGame: aFENGame [
 MyChessGame >> move: piece to: square [
 
 	piece moveTo: square.
-	self recordMovementOf: piece to: square
+	self recordMovementOf: piece to: square.
+	
+	(piece shouldBePromoted ) ifTrue: [	
+				self promotePawn: piece
+		 ].
+
+
+
+
 ]
 
 { #category : 'accessing' }
@@ -146,6 +154,24 @@ MyChessGame >> play [
 			moveCount := moveCount + 1.
 			currentPlayer := whitePlayer ].
 	self checkForMate
+]
+
+{ #category : 'as yet unclassified' }
+MyChessGame >> promotePawn: aPawn [
+	|newPiece square|
+	
+	square := aPawn square.
+	
+	newPiece := MyQueen new.
+	newPiece color: aPawn color.
+	newPiece square: square.
+	
+	square contents: newPiece.
+	
+	self pieces remove: aPawn ifAbsent: [ ].
+	self pieces add: newPiece.
+	
+
 ]
 
 { #category : 'moves' }

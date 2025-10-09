@@ -183,6 +183,12 @@ MyPiece >> rightFileLegal: aBoolean [
 	^ self collectSquares: [ :aSquare | aSquare right ] legal: aBoolean
 ]
 
+{ #category : 'asserting' }
+MyPiece >> shouldBePromoted [
+
+	^ false.
+]
+
 { #category : 'accessing' }
 MyPiece >> square [
 	^ square

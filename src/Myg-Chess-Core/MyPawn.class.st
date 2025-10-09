@@ -11,10 +11,23 @@ MyPawn >> id [
 	^ 'P'
 ]
 
+{ #category : 'testing' }
+MyPawn >> isPromotable [ 
+	
+	^(self isWhite and: [ self square row = 8 ])
+		or:  [ self color isBlack and: [ self square row = 1 ]].
+]
+
 { #category : 'rendering' }
 MyPawn >> renderPieceOn: aSquare [ 
 	
 	^ aSquare renderPawn: self
+]
+
+{ #category : 'asserting' }
+MyPawn >> shouldBePromoted [ 
+	
+	^ self isPromotable.
 ]
 
 { #category : 'rendering' }
