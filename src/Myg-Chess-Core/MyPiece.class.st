@@ -172,6 +172,16 @@ MyPiece >> moveTo: aSquare [
 ]
 
 { #category : 'rendering' }
+MyPiece >> renderOnDarkSquare [
+    ^ self subclassResponsibility
+]
+
+{ #category : 'rendering' }
+MyPiece >> renderOnLightSquare [
+    ^ self subclassResponsibility
+]
+
+{ #category : 'rendering' }
 MyPiece >> rightFile [
 
 	^ self rightFileLegal: false

@@ -254,6 +254,14 @@ MyChessSquare >> renderPawn: aPiece [
 ]
 
 { #category : 'rendering' }
+MyChessSquare >> renderPiece: aPiece [
+    "Premier dispatch : la case choisit le message selon sa couleur"
+    ^ (self color isBlack)
+        ifTrue:  [ aPiece renderOnDarkSquare ]
+        ifFalse: [ aPiece renderOnLightSquare ].
+]
+
+{ #category : 'rendering' }
 MyChessSquare >> renderQueen: aPiece [
 
 	^ aPiece isWhite
