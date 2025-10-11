@@ -27,17 +27,17 @@ UIPromotion >> choosePieceFor: aPawn [
     
     "Titre"
     container addChild: (BlTextElement new
-        text: ('Choisissez votre pièce' asRopedText 
+        text: ('Choose your piece' asRopedText 
             fontSize: 20;
             yourself);
         yourself).
     
     "Créer les 4 boutons"
     #(
-        ('Reine' MyQueen)
-        ('Tour' MyRook)
-        ('Fou' MyBishop)
-        ('Cavalier' MyKnight)
+        ('Queen' MyQueen)
+        ('Rook' MyRook)
+        ('Bishop' MyBishop)
+        ('Knight' MyKnight)
     ) do: [ :pair |
         | button |
         button := ToButton new
@@ -54,7 +54,7 @@ UIPromotion >> choosePieceFor: aPawn [
     "Créer et afficher"
     space := BlSpace new.
     space root addChild: container.
-    space title: 'Promotion du pion'.
+    space title: 'Add pawn promotion'.
     space extent: 300@300.
     space resizable: false.
     space show.
