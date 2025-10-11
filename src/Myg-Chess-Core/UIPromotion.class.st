@@ -7,10 +7,14 @@ Class {
 
 { #category : 'as yet unclassified' }
 UIPromotion >> choosePieceFor: aPawn [
-      
-	"Demande au joueur de choisir la pièce de promotion via une boîte de dialogue"
-    | space container selectedPiece |
-    selectedPiece := MyQueen.  "Défaut"
+   "Demande au joueur de choisir la pièce de promotion"
+    
+    | space container selectedPiece semaphore closed |
+    
+    selectedPiece := MyQueen.
+    semaphore := Semaphore new.
+    closed := false.
+    
     "Créer le conteneur"
     container := BlElement new
         layout: (BlLinearLayout vertical cellSpacing: 15);
@@ -20,12 +24,14 @@ UIPromotion >> choosePieceFor: aPawn [
             c horizontal fitContent.
             c vertical fitContent ];
         yourself.
+    
     "Titre"
     container addChild: (BlTextElement new
-        text: ('Choisissez votre piece' asRopedText 
+        text: ('Choisissez votre pièce' asRopedText 
             fontSize: 20;
             yourself);
         yourself).
+    
     "Créer les 4 boutons"
     #(
         ('Reine' MyQueen)
@@ -38,19 +44,31 @@ UIPromotion >> choosePieceFor: aPawn [
             labelText: pair first;
             yourself.
         button whenClickedDo: [ 
-            selectedPiece := pair second.
-            space close ].
+            closed ifFalse: [
+                selectedPiece := pair second.
+                closed := true.
+                space close.
+                semaphore signal ] ].
         container addChild: button ].
-    "Créer et afficher la fenêtre"
+    
+    "Créer et afficher"
     space := BlSpace new.
     space root addChild: container.
     space title: 'Promotion du pion'.
     space extent: 300@300.
     space resizable: false.
     space show.
-    "Attendre la sélection"
-    [ space isOpened ] whileTrue: [ 
-        (Delay forMilliseconds: 20) wait ].
+    
+    "Surveiller la fermeture en arrière-plan"
+    [ 
+        [ space isOpened ] whileTrue: [ 
+            (Delay forMilliseconds: 100) wait ].
+        closed ifFalse: [ semaphore signal ]
+    ] forkAt: Processor userBackgroundPriority.
+    
+    "Attendre le signal"
+    semaphore wait.
+    
     ^ selectedPiece new
         color: aPawn color;
         yourself
