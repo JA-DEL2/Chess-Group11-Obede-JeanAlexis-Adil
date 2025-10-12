@@ -12,9 +12,25 @@ MyKnight >> id [
 ]
 
 { #category : 'rendering' }
+MyKnight >> renderOnDarkSquare [
+    "Return the symbol for this knight when placed on a dark square."
+    ^ self isWhite
+        ifTrue: [ 'N' ]   "white knight on dark square"
+        ifFalse: [ 'm' ]. "black knight on dark square"
+]
+
+{ #category : 'rendering' }
+MyKnight >> renderOnLightSquare [
+    "Return the symbol for this knight when placed on a light square."
+    ^ self isWhite
+        ifTrue: [ 'M' ]   "white knight on light square"
+        ifFalse: [ 'n' ]. "black knight on light square"
+]
+
+{ #category : 'rendering' }
 MyKnight >> renderPieceOn: aSquare [
 
-	^ aSquare renderKnight: self
+	^ aSquare renderPiece: self
 ]
 
 { #category : 'rendering' }

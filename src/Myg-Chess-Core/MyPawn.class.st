@@ -19,9 +19,26 @@ MyPawn >> isPromotable [
 ]
 
 { #category : 'rendering' }
+MyPawn >> renderOnDarkSquare [
+    "Return the symbol for this pawn when placed on a dark square."
+    ^ self isWhite
+        ifTrue: [ 'P' ]   "white pawn on dark square"
+        ifFalse: [ 'o' ]. "black pawn on dark square"
+
+]
+
+{ #category : 'rendering' }
+MyPawn >> renderOnLightSquare [
+    "Return the symbol for this pawn when placed on a light square."
+    ^ self isWhite
+        ifTrue: [ 'O' ]   "white pawn on light square"
+        ifFalse: [ 'p' ]. "black pawn on light square"
+]
+
+{ #category : 'rendering' }
 MyPawn >> renderPieceOn: aSquare [ 
 	
-	^ aSquare renderPawn: self
+	^ aSquare renderPiece: self
 ]
 
 { #category : 'asserting' }
