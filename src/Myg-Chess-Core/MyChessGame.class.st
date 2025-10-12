@@ -92,6 +92,9 @@ MyChessGame >> initializeFromFENGame: aFENGame [
 		ifTrue: [ currentPlayer := whitePlayer ]
 		ifFalse: [ currentPlayer := blackPlayer ].
 		
+	whitePlayer useUIPromotion. "Joueur humain"
+	blackPlayer useUIPromotion. "Joueur humain"
+		
 	moveCount := aFENGame moveCount.
 
 	board := MyChessBoard fromFENBoard: aFENGame board.
@@ -158,18 +161,16 @@ MyChessGame >> play [
 
 { #category : 'as yet unclassified' }
 MyChessGame >> promotePawn: aPawn [
-	|newPiece square|
-	
-	square := aPawn square.
-	
-	newPiece := MyQueen new.
-	newPiece color: aPawn color.
-	newPiece square: square.
-	
-	square contents: newPiece.
-	
-	self pieces remove: aPawn ifAbsent: [ ].
-	self pieces add: newPiece.
+ 
+    | newPiece square |
+    square := aPawn square.
+    
+    newPiece := currentPlayer promotion choosePieceFor: aPawn.
+    newPiece square: square.
+    
+    square contents: newPiece.
+    
+    ^ newPiece
 	
 
 ]

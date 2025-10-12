@@ -3,7 +3,8 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'color',
-		'game'
+		'game',
+		'promotion'
 	],
 	#category : 'Myg-Chess-Core',
 	#package : 'Myg-Chess-Core'
@@ -37,6 +38,12 @@ MyPlayer >> game [
 MyPlayer >> game: anObject [
 
 	game := anObject
+]
+
+{ #category : 'initialization' }
+MyPlayer >> initialize [ 
+	super initialize. 
+	promotion := BotPromotion new.
 ]
 
 { #category : 'testing' }
@@ -76,6 +83,30 @@ MyPlayer >> play [
 			^ self ] ].
 
 	self halt: 'NO MOVES AVAILABLE!'
+]
+
+{ #category : 'accessing' }
+MyPlayer >> promotion [
+
+	^ promotion 
+]
+
+{ #category : 'accessing' }
+MyPlayer >> promotion: aPawn [
+
+	^ promotion := aPawn 
+]
+
+{ #category : 'as yet unclassified' }
+MyPlayer >> useBotPromotion [
+
+	self promotion: BotPromotion new.
+]
+
+{ #category : 'as yet unclassified' }
+MyPlayer >> useUIPromotion [
+
+	self promotion: UIPromotion new.
 ]
 
 { #category : 'constants' }
