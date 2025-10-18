@@ -11,9 +11,25 @@ MyRook >> id [
 ]
 
 { #category : 'rendering' }
+MyRook >> renderOnDarkSquare [
+    "Return the symbol for this rook on a dark square."
+    ^ self isWhite
+        ifTrue: [ 'R' ]   "white rook on dark square"
+        ifFalse: [ 't' ]. "black rook on dark square"
+]
+
+{ #category : 'rendering' }
+MyRook >> renderOnLightSquare [
+    "Return the symbol for this rook on a light square."
+    ^ self isWhite
+        ifTrue: [ 'T' ]   "white rook on light square"
+        ifFalse: [ 'r' ]. "black rook on light square"
+]
+
+{ #category : 'rendering' }
 MyRook >> renderPieceOn: aSquare [
 
-	^ aSquare renderRook: self
+	^ aSquare renderPiece: self
 ]
 
 { #category : 'rendering' }

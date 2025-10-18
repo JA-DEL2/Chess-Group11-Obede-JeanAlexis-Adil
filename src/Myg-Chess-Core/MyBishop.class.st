@@ -13,13 +13,15 @@ MyBishop >> id [
 
 { #category : 'rendering' }
 MyBishop >> renderOnDarkSquare [
+	"Return the symbol on a dark square."
     ^ self isWhite
         ifTrue: [ 'B' ]   "white bishop on dark square"
-        ifFalse: [ 'V' ]. "black bishop on dark square"
+        ifFalse: [ 'V' ]. "black bishop on dark square" 
 ]
 
 { #category : 'rendering' }
 MyBishop >> renderOnLightSquare [
+	"Return the symbol on a light square."
     ^ self isWhite
         ifTrue: [ 'b' ]   "white bishop on light square"
         ifFalse: [ 'v' ]. "black bishop on light square"
@@ -28,7 +30,7 @@ MyBishop >> renderOnLightSquare [
 { #category : 'rendering' }
 MyBishop >> renderPieceOn: aSquare [
 
-	^ aSquare renderBishop: self
+	^ aSquare renderPiece: self
 ]
 
 { #category : 'rendering' }

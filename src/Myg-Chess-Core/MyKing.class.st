@@ -70,9 +70,25 @@ MyKing >> opponentPieces [
 ]
 
 { #category : 'rendering' }
+MyKing >> renderOnDarkSquare [
+    "Return the symbol for this king when placed on a dark square."
+    ^ self isWhite
+        ifTrue: [ 'K' ]   "white king on dark square"
+        ifFalse: [ 'L' ]. "black king on dark square"
+]
+
+{ #category : 'rendering' }
+MyKing >> renderOnLightSquare [
+    "Return the symbol for this king when placed on a light square."
+    ^ self isWhite
+        ifTrue: [ 'k' ]   "white king on light square"
+        ifFalse: [ 'l' ]. "black king on light square"
+]
+
+{ #category : 'rendering' }
 MyKing >> renderPieceOn: aSquare [
 
-	^ aSquare renderKing: self
+	^ aSquare renderPiece: self
 ]
 
 { #category : 'rendering' }
