@@ -15,11 +15,12 @@ UIPromotion >> choosePieceFor: aPawn [
     semaphore := Semaphore new.
     closed := false.
     
-    "Créer le conteneur"
+    "Conteneur principal"
     container := BlElement new
         layout: (BlLinearLayout vertical cellSpacing: 15);
         background: Color white;
-        padding: (BlInsets all: 30);
+        padding: (BlInsets all: 25);
+        geometry: (BlRoundedRectangleGeometry cornerRadius: 10);
         constraintsDo: [ :c |
             c horizontal fitContent.
             c vertical fitContent ];
@@ -28,21 +29,48 @@ UIPromotion >> choosePieceFor: aPawn [
     "Titre"
     container addChild: (BlTextElement new
         text: ('Choose your piece' asRopedText 
-            fontSize: 20;
+            fontSize: 17;
             yourself);
         yourself).
     
-    "Créer les 4 boutons"
+    "Boutons avec pièces utilisant la police OpenChess"
     #(
-        ('Queen' MyQueen)
-        ('Rook' MyRook)
-        ('Bishop' MyBishop)
-        ('Knight' MyKnight)
+        ('Q Queen' MyQueen)
+        ('R Rook' MyRook)
+        ('B Bishop' MyBishop)
+        ('N Knight' MyKnight)
     ) do: [ :pair |
-        | button |
-        button := ToButton new
-            labelText: pair first;
+        | button label |
+        
+        "Créer un label avec icône OpenChess + texte"
+        label := BlElement new
+            layout: (BlLinearLayout horizontal cellSpacing: 10);
+            constraintsDo: [ :c | 
+                c horizontal fitContent.
+                c vertical fitContent ];
             yourself.
+        
+        "Icône de la pièce avec OpenChess font"
+        label addChild: (BlTextElement new
+            text: (pair first first asString asRopedText
+                fontSize: 24;
+                fontName: MyOpenChessDownloadedFont new familyName;
+                yourself);
+            yourself).
+        
+        "Nom de la pièce"
+        label addChild: (BlTextElement new
+            text: (pair first allButFirst asRopedText
+                fontSize: 16;
+                yourself);
+            yourself).
+        
+        button := ToButton new.
+        button removeChildren.
+        button addChild: label.
+        button geometry: (BlRoundedRectangleGeometry cornerRadius: 8).
+        button padding: (BlInsets all: 15).
+        button constraintsDo: [ :c | c horizontal matchParent ].
         button whenClickedDo: [ 
             closed ifFalse: [
                 selectedPiece := pair second.
@@ -51,22 +79,20 @@ UIPromotion >> choosePieceFor: aPawn [
                 semaphore signal ] ].
         container addChild: button ].
     
-    "Créer et afficher"
+    "Afficher"
     space := BlSpace new.
     space root addChild: container.
-    space title: 'Add pawn promotion'.
-    space extent: 300@300.
-    space resizable: false.
+    space title: 'Add Pawn Promotion'.
+    space extent: 250@250.
     space show.
     
-    "Surveiller la fermeture en arrière-plan"
+    "Surveiller fermeture"
     [ 
-        [ space isOpened ] whileTrue: [ 
-            (Delay forMilliseconds: 100) wait ].
+        [ space isOpened ] whileTrue: [ (Delay forMilliseconds: 100) wait ].
         closed ifFalse: [ semaphore signal ]
     ] forkAt: Processor userBackgroundPriority.
     
-    "Attendre le signal"
+    "Attendre"
     semaphore wait.
     
     ^ selectedPiece new

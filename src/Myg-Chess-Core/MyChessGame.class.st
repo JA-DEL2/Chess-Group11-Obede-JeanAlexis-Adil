@@ -92,8 +92,8 @@ MyChessGame >> initializeFromFENGame: aFENGame [
 		ifTrue: [ currentPlayer := whitePlayer ]
 		ifFalse: [ currentPlayer := blackPlayer ].
 		
-	whitePlayer useUIPromotion. "Joueur humain"
-	blackPlayer useUIPromotion. "Joueur humain"
+	whitePlayer useUIPromotion . 
+	blackPlayer useUIPromotion . 
 		
 	moveCount := aFENGame moveCount.
 
