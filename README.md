@@ -1,4 +1,6 @@
-# Myg Chess Game
+# Chess - Group 11
+
+# Reminder of Myg Chess Game Project 
 
 This is a chess game for Pharo based on Bloc, Toplo and Myg.
 
