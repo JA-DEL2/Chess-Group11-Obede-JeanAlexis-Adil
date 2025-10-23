@@ -91,12 +91,7 @@ MyChessSquare >> contents: aPiece [
 	| text |
 	contents := aPiece.
 
-	text := contents
-		        ifNil: [
-			        color isBlack
-				        ifFalse: [ 'z' ]
-				        ifTrue: [ 'x' ] ]
-		        ifNotNil: [ contents renderPieceOn: self ].
+	text := contents renderPieceOn: self .
 	piece text: (text asRopedText
 			 fontSize: 48;
 			 foreground: self foreground;
@@ -112,7 +107,7 @@ MyChessSquare >> down [
 { #category : 'asd' }
 MyChessSquare >> emptyContents [
 	
-	self contents: nil
+	self contents: MyEmptyPiece new
 ]
 
 { #category : 'accessing' }
@@ -204,6 +199,13 @@ MyChessSquare >> renderPiece: aPiece [
     ^ (self color isBlack)
         ifTrue:  [ aPiece renderOnDarkSquare ]
         ifFalse: [ aPiece renderOnLightSquare ].
+]
+
+{ #category : 'rendering' }
+MyChessSquare >> renderEmptyPiece: aPiece [
+	color isBlack
+		ifFalse: [ 'z' ]
+		ifTrue: [ 'x' ]
 ]
 
 { #category : 'accessing' }
