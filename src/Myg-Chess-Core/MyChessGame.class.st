@@ -92,8 +92,8 @@ MyChessGame >> initializeFromFENGame: aFENGame [
 		ifTrue: [ currentPlayer := whitePlayer ]
 		ifFalse: [ currentPlayer := blackPlayer ].
 		
-	whitePlayer useUIPromotion . 
-	blackPlayer useUIPromotion . 
+	whitePlayer useUIPromotion. 
+	blackPlayer useUIPromotion. 
 		
 	moveCount := aFENGame moveCount.
 
@@ -128,13 +128,15 @@ MyChessGame >> initializeFromFENGame: aFENGame [
 
 { #category : 'public' }
 MyChessGame >> move: piece to: square [
-
-	piece moveTo: square.
-	self recordMovementOf: piece to: square.
 	
-	(piece shouldBePromoted ) ifTrue: [	
-				self promotePawn: piece
-		 ].
+	piece moveTo: square.
+    self recordMovementOf: piece to: square.
+    
+    (piece shouldBePromoted) ifTrue: [
+        currentPlayer promotion promoteAsync: piece inGame: self
+    ]
+	
+
 
 
 
@@ -157,22 +159,6 @@ MyChessGame >> play [
 			moveCount := moveCount + 1.
 			currentPlayer := whitePlayer ].
 	self checkForMate
-]
-
-{ #category : 'as yet unclassified' }
-MyChessGame >> promotePawn: aPawn [
- 
-    | newPiece square |
-    square := aPawn square.
-    
-    newPiece := currentPlayer promotion choosePieceFor: aPawn.
-    newPiece square: square.
-    
-    square contents: newPiece.
-    
-    ^ newPiece
-	
-
 ]
 
 { #category : 'moves' }

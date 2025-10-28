@@ -5,6 +5,12 @@ Class {
 	#package : 'Myg-Chess-Core'
 }
 
+{ #category : 'testing' }
+MyEmptyPiece >> isPiece [
+	
+	^ false
+]
+
 { #category : 'rendering' }
 MyEmptyPiece >> renderPieceOn: aSquare [
 
@@ -15,10 +21,4 @@ MyEmptyPiece >> renderPieceOn: aSquare [
 MyEmptyPiece >> targetSquaresLegal: aBoolean [
 
 	^ OrderedCollection new
-]
-
-{ #category : 'testing' }
-MyEmptyPiece >> isPiece [
-	
-	^ false
 ]

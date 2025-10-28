@@ -194,18 +194,18 @@ MyChessSquare >> printOn: aStream [
 ]
 
 { #category : 'rendering' }
+MyChessSquare >> renderEmptyPiece: aPiece [
+	color isBlack
+		ifFalse: [ 'z' ]
+		ifTrue: [ 'x' ]
+]
+
+{ #category : 'rendering' }
 MyChessSquare >> renderPiece: aPiece [
     "First dispatch on the case which choose the message according to the color"
     ^ (self color isBlack)
         ifTrue:  [ aPiece renderOnDarkSquare ]
         ifFalse: [ aPiece renderOnLightSquare ].
-]
-
-{ #category : 'rendering' }
-MyChessSquare >> renderEmptyPiece: aPiece [
-	color isBlack
-		ifFalse: [ 'z' ]
-		ifTrue: [ 'x' ]
 ]
 
 { #category : 'accessing' }
