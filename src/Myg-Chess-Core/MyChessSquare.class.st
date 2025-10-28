@@ -127,7 +127,7 @@ MyChessSquare >> foreground [
 { #category : 'testing' }
 MyChessSquare >> hasPiece [
 	
-	^ contents isNil not
+	^ contents isPiece
 ]
 
 { #category : 'highlighting' }
@@ -191,13 +191,6 @@ MyChessSquare >> printOn: aStream [
 	aStream
 		nextPutAll: ' name: ';
 		print: name
-]
-
-{ #category : 'rendering' }
-MyChessSquare >> renderEmptyPiece: aPiece [
-	color isBlack
-		ifFalse: [ 'z' ]
-		ifTrue: [ 'x' ]
 ]
 
 { #category : 'rendering' }

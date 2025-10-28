@@ -12,9 +12,19 @@ MyEmptyPiece >> isPiece [
 ]
 
 { #category : 'rendering' }
+MyEmptyPiece >> renderOnDarkSquare [
+    ^ 'x'
+]
+
+{ #category : 'rendering' }
+MyEmptyPiece >> renderOnLightSquare [
+    ^ 'z'
+]
+
+{ #category : 'rendering' }
 MyEmptyPiece >> renderPieceOn: aSquare [
 
-	^ aSquare renderEmptyPiece: self
+	^ aSquare renderPiece: self
 ]
 
 { #category : 'rendering' }
