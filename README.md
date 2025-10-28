@@ -1,35 +1,35 @@
 # Chess - Group 11
 
-# Reminder of Myg Chess Game Project 
+## Installation Instructions
 
-This is a chess game for Pharo based on Bloc, Toplo and Myg.
+### Prerequisites
+- Pharo 12 installed on your system
 
-## What is this repository really about
+### Installation Steps
 
-The goal of this repository is not to be a complete full blown game, but a good enough implementation to practice software engineering skills:
- - testing
- - reading existing code
- - refactorings
- - profiling
- - debugging
-
-## Getting started
-
-### Getting the code
-
-This code has been tested in Pharo 12. You can get it by installing the following baseline code:
-
-```smalltalk
-Metacello new
-	repository: 'github://UnivLille-Meta/Chess:main';
-	baseline: 'MygChess';
-	onConflictUseLoaded;
-	load.
+1. **Clone the repository**
+```bash
+git clone https://github.com/JA-DEL2/Chess-Group11-Obede-JeanAlexis-Adil
+cd Chess
 ```
 
-### Using it
+2. **Load the baseline in Pharo 12**
+```smalltalk
+Metacello new
+    repository: 'github://UnivLille-Meta/Chess:main';
+    baseline: 'MygChess';
+    onConflictUseLoaded;
+    load.
+```
 
-You can open the chess game using the following expression:
+3. **Wait for dependencies to load**
+   - Bloc (graphics framework)
+   - Toplo (UI components)
+   - Chess font assets
+
+## Usage Instructions
+
+### Running the Game
 
 ```smalltalk
 board := MyChessGame freshGame.
@@ -41,233 +41,254 @@ space resizable: true.
 space show.
 ```
 
-## Relevant Design Points
 
-This repository contains:
- - a chess model: the board/squares, the pieces, their movements, how they threat each other
- - a UI using Bloc and Toplo: a board is rendered as bloc UI elements. Each square is a UI element that contains a selection, an optional piece. Pieces are rendered using a text element and a special chess font (https://github.com/joshwalters/open-chess-font/tree/master).
- - Textual game importers for the PGN and FEN standards (see https://ia902908.us.archive.org/26/items/pgn-standard-1994-03-12/PGN_standard_1994-03-12.txt and https://www.chessprogramming.org/Forsyth-Edwards_Notation#Samples)
+# Adil
 
-## Katas
+# Chess - Kata "Refactor piece rendering"
 
-These are some ideas of exercises you may try:
+## Code and tests location
 
-### Fix pawn moves!
+* Code is under the `Myg-Chess-Core` package and use the classes MyChesssquare for **renderPiece** and Mypiece classe and subclasses(`MyBishop`, `MyRook`...).
+* Tests are in the corresponding test classes in PieceRenderingTest.
+* All tests run successfully, it's just a manual testing, no mutation ...
 
-**Goal:** Practice debugging and testing
+## Difficulties encountered
 
-Pawns are one of the most complicated pieces of chess to implement.
-They move forward, one square at a time, except for their first movement.
-However, they can move diagonally to capture other pieces.
-And in addition, there is the (in)famous "En passant" move that complicates everything (see https://en.wikipedia.org/wiki/En_passant, and the FEN documentation for ideas on how to encode this information https://www.chessprogramming.org/Forsyth-Edwards_Notation#En_passant_target_square).
-As any *complicated* feature, the original developer (Guille P) left this for the end, and then left the project.
-But you can do it.
+- At first, understanding how to use double dispatch correctly was confusing.
+I solved it by isolating responsibilities between `MyChessSquare` and `MyPiece`, then testing step by step.
+The exercises and previous exam (2024) helped me understand dispatch better.
+---
 
-Questions and ideas that can help you in the process:
-- Can you write tests showing the bugs?
-- What kind of tools can you use to spot the bug?
-- Can you approach this incrementally? This is, splitting this task in many subtasks. How would you prioritize them?
 
-### Restrict legal moves
+### Double Dispatch Implementation (my approach) 
 
-**Goal:** Practice code understanding, refactorings and debugging
+I implemented **double dispatch** for piece rendering. 
+Each `MyChessSquare` decides which message to send (`renderOnDarkSquare` or `renderOnLightSquare`) according to its color, and each `MyPiece` (e.g. `MyBishop`, `MyKing`, etc.) decides what symbol to return based on its own color.
 
-In chess, when we are not in danger we can move any piece we want in general, as soon as we follow the rules.
-However, when the king gets threatened, we must protect it!
-The only legal moves in that scenario are the ones that save the king (or otherwise we lose).
-What are moves that protect the king? The ones that capture the attacker, block the attack, or move the king out of danger.
-Another way to see it is: A move protects the king if it moves it out of check.
-
-The current implementation does not support this restriction.
-As any *complicated* feature, the original developer (Guille P) left this for the end, and then left the project.
-But you can do it.
-
-Questions and ideas that can help you in the process:
-- What tools help you finding the right place to put this new code?
-- How do you avoid repeating all the existing code computing legal moves and checks?
-
-### Fuzz the board
-
-**Goal:** Practice fuzzing and automated testing on the board
-
-Are we sure the game works? We would like to add automated testing in the loop.
-You can do it.
-
-Questions and ideas that can help you in the process:
-- A board can be configured from a FEN format string. What if you generate FEN strings automatically?
-- Once a board is configured, you can test moves. Can you generate (in)valid moves and validate they were correct?
-- The parsers inside the game are probably a nice target for fuzzing too. Did you consider that they may be buggy?
-- Do not forget to test "ugly and invalid scenarios" too
-
-### Implement more bot gaming strategies
-
-**Goal:** Practice refactorings and algorithms
-
-Currently the engine allows players to play automatically using a "random move" strategy.
-However, many different automatic strategies can be implemented: https://www.youtube.com/watch?v=DpXy041BIlA.
-How can we plug those into the game?
-As any *crazy* feature, the original developer (Guille P) did not prepare the engine for this.
-But you can do it.
-
-Questions and ideas that can help you in the process:
-- How could you know that you're not breaking something while refactoring?
-- Can you write tests that help you with the process?
-- Can you do the refactoring in little steps that avoid breaking the code?
-- Introducing a new game "AI" may require that we expose new methods in the engine.
-
-### Remove nil checks
-
-**Goal:** Practice refactorings and patterns
-
-In the game, each square has optionally a piece.
-The absence of a piece is represented as a `nil`.
-As any project done in stress during a short period of time (a couple of evenings when the son is sick), the original developer (Guille P) was not 100% following coding standards and quality recommendations.
-We would like to clean up the game logic and remove `nil` checks using some polymorphism.
-You can do it.
-
-Questions and ideas that can help you in the process:
-- How do we transform nil checks into polymorphism?
-- What kind of API should you design?
-- Can tests help you do it with less pain?
-- Something similar happens when a pieces wants to move outside of the board, can you find it and fix it?
-
-### Refactor piece rendering
-
-**Goal:** Practice refactorings, double dispatch and table dispatch
-
-The game renders pieces with methods that look like these:
+**Example:**
 
 ```smalltalk
-MyChessSquare >> renderKnight: aPiece
+MyChessSquare >> renderPiece: aPiece
+    "First dispatch: the square chooses the message"
+    ^ (self color isBlack)
+        ifTrue:  [ aPiece renderOnDarkSquare ]
+        ifFalse: [ aPiece renderOnLightSquare ].
 
-	^ aPiece isWhite
-		  ifFalse: [ color isBlack
-				  ifFalse: [ 'M' ]
-				  ifTrue: [ 'm' ] ]
-		  ifTrue: [
-			  color isBlack
-				  ifFalse: [ 'N' ]
-				  ifTrue: [ 'n' ] ]
+MyBishop >> renderOnDarkSquare
+    "Second dispatch: the piece decides what to draw"
+    ^ self isWhite
+        ifTrue: [ 'B' ]
+        ifFalse: [ 'V' ].
 ```
-As any project done in stress during a short period of time (a couple of evenings when the son is sick), the original developer (Guille P) was not 100% following coding standards and quality recommendations.
-We would like you to clean up this rendering logic and remove as much conditionals as possible, for the sake of it.
-You can do it.
 
-Questions and ideas that can help you in the process:
-- Can you do an implementation with double dispatch?
-- Can you do an implementation with table dispatch?
-- What are the good and bad parts of them in *this scenario*? Do you understand why?
+**Double dispatch:**
 
-### Make the chess board graphical editor
+ **Good:** Clear separation of responsibilities; easy to extend by adding new classes or behaviors. 
+ 
+ **Bad:** Can lead to many small methods, increasing code complexity and maintenance effort. 
 
-**Goal:** Practice large refactorings to decouple game logic from rendering
+**Table dispatch:**
 
-The current UI is really tied to the game engine. Clicking on the squares will try to move the pieces and play the game.
-We would like to do a graphical board editor and reuse the graphics.
-But this editor does not need the game logic behind.
-As any *crazy* feature, the original developer (Guille P) did not prepare the engine for this.
-But you can do it.
+ **Good:** Centralizes all combinations in one place; easy to see and modify behavior for all cases. 
+ 
+ **Bad:** Less object-oriented; harder to extend with new classes without changing the table; can become unwieldy as cases grow. 
+ 
+In this scenario, double dispatch is better because it keeps the design object-oriented — each class is responsible for its own behavior, and adding new pieces or colors doesn’t require changing existing code. Table dispatch would centralize all cases but break encapsulation and make extensions harder. Double dispatch is cleaner and more maintainable here.
 
-Questions and ideas that can help you in the process:
-- How could you know that you're not breaking something while refactoring?
-- Can you write tests that help you with the process?
-- Refactoring and testing UI code can be challenging: this does not mean it is impossible!
-- Can you do the refactoring in little steps that avoid breaking the code?
 
-### Make the game UI themable
+## Design Decisions
 
-**Goal:** Practice large refactorings to decouple game logic from rendering
+* **Why is the code like this?**
+  I chose double dispatch (goal of this kata) to separate responsibilities: `MyChessSquare` decides which rendering method to call based on its color, and each `MyPiece` decides what symbol to display. This avoids large nested conditionals and keeps the design object-oriented.
 
-Instead of using a font, try using assets from https://opengameart.org/art-search-advanced?field_art_tags_tid=chess or https://game-icons.net/.
-As any *crazy* feature, the original developer (Guille P) did not prepare the engine for this.
-But you can do it.
+* **Why is this part of the code more tested than the other?**
+  Rendering logic is critical because it directly affects visual output and user experience. We focused tests on `renderPiece:` and the piece-specific `renderOnDarkSquare` / `renderOnLightSquare` methods to ensure all color and piece combinations work correctly.
 
-Questions and ideas that can help you in the process:
-- How could you know that you're not breaking something while refactoring?
-- Can you write tests that help you with the process?
-- Refactoring and testing UI code can be challenging: this does not mean it is impossible!
-- Can you do the refactoring in little steps that avoid breaking the code?
+* **Where did you put the priorities?**
+  Priority was given to **correct rendering first**, then code readability, and finally extensibility for new pieces or board types.
 
-### Add pawn promotion
+* **Where did you use (or not) design patterns and why?**
+  We used the **double dispatch pattern** to handle piece–square interactions cleanly. We avoided table dispatch because it would centralize all combinations, break encapsulation, and make the code harder to extend.
 
-**Goal:** Practice code understanding and debugging
 
-When pawns arrive to the back of the board, the pawn is promoted: it is transfomed into a major (queen, rook) or minor piece (knight, bishop), choice of the player.
-When in an interactive UI, this requires asking the user what to do.
-When in an automatic player/bot, this requires some automated decision approach.
+# Obede 
 
-As any *complicated* feature, the original developer (Guille P) left this for the end, and then left the project.
-But you can do it.
+## Chess - Kata "Add Pawn Promotion"
 
-Questions and ideas that can help you in the process:
-- What tools help you finding the right place to put this new code?
-- How can you find documentation and help to understand the graphical part that will implement, for example, a pop-up?
-- The bot will not need a UI, how would you make it work without breaking the other existing code?
+## Kata Objective
 
-### Implement the 9 queens problem
+### Implement pawn promotion with:
+- **UI players**: Dialog to choose piece (Queen/Rook/Bishop/Knight)
+- **Bots**: Automatic promotion to Queen
 
-**Goal:** Practice refactoring and algorithms
+---
+## Testing Pawn Promotion
 
-Chess players like puzzles. One well-known puzzle is the 9 queens puzzle (https://www.chessvariants.com/problems.dir/9queens.html).
-The player should put 9 queens on the board without having them threat each other.
-You have to implement the game reusing the existing code (the queens implementation, the board).
-As any *crazy* feature, the original developer (Guille P) did not prepare the engine for this.
-But you can do it.
+### 1. Manual testing with UI:
 
-Questions and ideas that can help you in the process:
-- What parts of the original code are useful for you and which ones are not? Can you make the game extensible to take this into account?
-- The 9 queens game has a different winning condition than a normal game chess, how can you plug different winning conditions?
+- Move a pawn to the last rank (row 8 for white, row 1 for black)
+- A dialog window will appear asking you to choose a piece
+- Click on your preferred piece (Queen, Rook, Bishop, or Knight)
 
-### Game Replay
 
-**Goal:** Practice refactoring and debugging
+### 2. Testing with Bot:
 
-A common practice between chess players is to study old games.
-Fortunately, many old games exist digitalized in PGN format, and the engine has initial support for it!
-You have to implement a replay feature, where a game is imported and the player move the game forward/backwards given the list of moves.
-As any *crazy* feature, the original developer (Guille P) did not prepare the engine for this.
-But you can do it.
+- Click the "Play!" button
+- Bots automatically promote pawns to queens
 
-Questions and ideas that can help you in the process:
-- How should you extend the UI to implement this feature?
-- What would happen if the PGN support is not complete/perfect? How can you manage to improve it?
+## Reverse Engineering Process (Following Course Methodology)
 
-### Positional Heatmap
+### 1. High-Level View (FOCUS)
 
-**Goal:** Practice refactoring, code understanding and a bit of profiling
+**Initial mapping:**
+- `MyChessGame >> move:to:` → central move execution point
+- `MyPawn` → has movement, missing promotion
+- `MyPlayer` → represents player
 
-Chess pieces have a certain influence in the board.
-For example, a queen controls all squares in its diagonals, ranks and columns.
-However, when many pieces are in the game, understanding how such control gives advantage to a player is difficult.
-Players need a lot of mental calculation.
+**BACKLOG (ignored):** Bloc internals, other rules (castling, en passant), rendering details
 
-Your task is to build a heatmap as in https://tlee753.com/chess-visualizer/, where the background color of the square is chosen depending on the influence of each player.
-Strong white control is green. Strong black control is red.
-As any *crazy* feature, the original developer (Guille P) did not prepare the engine for this.
-But you can do it.
+### 2. Finding Entry Point
 
-Questions and ideas that can help you in the process:
-- How can this support be plugged in as an optional feature in the game?
-- Computing the influence could be an expensive analysis. Can you profile your code to see if there are potential improvements you can do?
+**Tool used:** Senders of `move:to:`
 
-### Chess Variants
-
-https://www.chess.com/terms/chess-variants
-
- - Horde
- - Fog of War
- - Atomic
- - 3-check
- - King of the hill
-
-### Chess puzzles database integration
-
-http://www.bstephen.me.uk/meson/meson.pl?opt=top
-https://www.yacpdb.org/#static/home
-
-## Troubleshotting
-
-- Exceptions in the Myg UI thread stop the event cycle. This makes the game "freeze": it receives events but the thread that treats them is not running. To restart the UI thread, execute the following:
+**Found:**
 ```smalltalk
-BlParallelUniverse all do: #startUniverse.
+MyChessGame >> move: piece to: square
+    piece moveTo: square.
+    self recordMovementOf: piece to: square.
+    "← No promotion handling here"
 ```
+
+**Decision:** Hook into this method after move execution.
+
+### 3. Progressive Implementation
+
+#### Step 1: Detection
+```smalltalk
+MyPawn >> isPromotable
+    ^(self isWhite and: [ self square file = $8 ])
+        or: [ self color isBlack and: [ self square file = $1 ]].
+
+MyPawn >> shouldBePromoted
+    ^ self isPromotable.
+```
+
+#### Step 2: Integration
+```smalltalk
+MyChessGame >> move: piece to: square
+    piece moveTo: square.
+    self recordMovementOf: piece to: square.
+    
+    (piece shouldBePromoted) ifTrue: [
+        currentPlayer promotion promoteAsync: piece inGame: self
+    ]
+```
+
+#### Step 3: Double Dispatch (Course Concept!)
+
+**Hierarchy created:**
+```
+MyPromotion
+    ├── BotPromotion (auto Queen)
+    └── UIPromotion (dialog)
+```
+
+**Double dispatch flow:**
+```smalltalk
+currentPlayer promotion              "1st dispatch → get strategy"
+    ↓
+promotion promoteAsync: piece inGame: "2nd dispatch → execute behavior"
+```
+
+
+#### Step 4-5: Implementation
+
+**BotPromotion (simple):**
+```smalltalk
+BotPromotion >> promoteAsync: aPawn inGame: aGame
+    | newPiece square |
+    square := aPawn square.
+    newPiece := MyQueen new.
+    newPiece color: aPawn color.
+    newPiece square: square.
+    square contents: newPiece
+```
+
+**UIPromotion (complex):**
+- Used `BlElement`, `ToButton`, `BlSpace` (found via References tool)
+- Created dialog with 4 buttons (Q/R/B/K)
+- Each button replaces pawn and closes window
+<p align="center">
+  <img src="https://github.com/JA-DEL2/Chess-Group11-Obede-JeanAlexis-Adil/blob/main/add_pawn_promotion.png">
+</p>
+
+## Key Design Decisions
+
+### 1. Double Dispatch Pattern
+
+**Why?** Same pattern as piece rendering already in codebase.
+
+**Benefits:**
+- No `if bot then... else...` conditionals
+- Easy to extend (add NetworkPromotion later)
+- Decouples game logic from promotion behavior
+
+### 2. Hook Method `shouldBePromoted`
+
+**Instead of:** `(piece isKindOf: MyPawn) and: [...]`
+
+**Use:** `piece shouldBePromoted` (polymorphic, all pieces respond)
+
+### 3. Default BotPromotion
+
+Safe fallback in `MyPlayer >> initialize` for tests and error prevention.
+
+---
+
+## Testing
+
+```smalltalk
+MyPromotionTest >> testBotPromotionCreatesQueen
+    game := MyChessGame freshGame.
+    board := game board.
+    board at: 'e8' put: (pawn := MyPawn white).
+    
+    promotion := BotPromotion new.
+    promotion promoteAsync: pawn inGame: game.
+    
+    self assert: (board at: 'e8') contents class equals: MyQueen.
+```
+
+**Coverage:** Automated tests for logic, manual tests for UI.
+
+---
+
+## What I Learned
+
+**Technical:**
+- Applied double dispatch (first time implementing myself)
+- Used Senders/References tools to navigate codebase
+- Worked with Bloc/Toplo framework through exploration
+
+**Methodological:**
+- High-Level View → Entry Point → Progressive Implementation
+- "Ignore to Focus" strategy (BACKLOG management)
+- Recognized and reused existing patterns (rendering → promotion)
+
+---
+
+## Code Location
+
+```
+src/Myg-Chess-Core/
+├── MyPromotion.class.st      # Abstract
+├── BotPromotion.class.st     # Auto Queen
+└── UIPromotion.class.st      # Dialog
+
+src/Myg-Chess-Tests/
+├── MyPromotionTest.class.st
+└── MyPawnTest.class.st
+```
+
+
+
