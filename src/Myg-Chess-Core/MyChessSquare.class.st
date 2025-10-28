@@ -127,7 +127,7 @@ MyChessSquare >> foreground [
 { #category : 'testing' }
 MyChessSquare >> hasPiece [
 	
-	^ contents isNil not
+	^ contents isPiece
 ]
 
 { #category : 'highlighting' }
