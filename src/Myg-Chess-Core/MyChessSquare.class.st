@@ -201,13 +201,6 @@ MyChessSquare >> renderPiece: aPiece [
         ifFalse: [ aPiece renderOnLightSquare ].
 ]
 
-{ #category : 'rendering' }
-MyChessSquare >> renderEmptyPiece: aPiece [
-	color isBlack
-		ifFalse: [ 'z' ]
-		ifTrue: [ 'x' ]
-]
-
 { #category : 'accessing' }
 MyChessSquare >> right [
 	
